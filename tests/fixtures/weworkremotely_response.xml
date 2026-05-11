@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>We Work Remotely: Remote Back End Programming Jobs</title>
+    <link>https://weworkremotely.com</link>
+    <item>
+      <title><![CDATA[TechStartup: Backend Java Engineer]]></title>
+      <link>https://weworkremotely.com/remote-jobs/techstartup-backend-java-engineer</link>
+      <pubDate>Thu, 01 May 2026 09:00:00 +0000</pubDate>
+      <description><![CDATA[Remote Java backend engineer. Spring Boot, Kafka, PostgreSQL. Hyderabad or Remote. 2-4 years experience. Microservices architecture.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[DataCorp: Data Engineer]]></title>
+      <link>https://weworkremotely.com/remote-jobs/datacorp-data-engineer</link>
+      <pubDate>Thu, 01 May 2026 10:00:00 +0000</pubDate>
+      <description><![CDATA[Data engineer. Python Spark Hadoop. Remote. 4+ years.]]></description>
+    </item>
+  </channel>
+</rss>

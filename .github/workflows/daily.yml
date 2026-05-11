@@ -1,0 +1,43 @@
+name: Daily Job Digest
+
+on:
+  schedule:
+    - cron: '30 2 * * *'   # 08:00 IST (UTC+5:30)
+  workflow_dispatch:        # manual trigger from GitHub UI
+
+permissions:
+  contents: write           # needed to commit seen.db + digests/ back
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run job radar
+        env:
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          FINDWORK_API_KEY: ${{ secrets.FINDWORK_API_KEY }}
+          INSTAHYRE_COOKIES: ${{ secrets.INSTAHYRE_COOKIES }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: uv run python -m radar
+
+      - name: Commit digest + seen.db
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add digests/ seen.db
+          git diff --staged --quiet || git commit -m "digest: $(date -u +%Y-%m-%d)"
+          git push

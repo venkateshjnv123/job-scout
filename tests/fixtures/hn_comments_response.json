@@ -1,0 +1,14 @@
+{
+  "hits": [
+    {
+      "objectID": "41234600",
+      "comment_text": "Acme Backend | Backend Engineer | Remote / Hyderabad | Full-time | Java Spring Boot Kafka microservices 2-4 years. We build distributed systems at scale.",
+      "created_at": "2026-05-01T10:00:00Z"
+    },
+    {
+      "objectID": "41234601",
+      "comment_text": "FrontendCo | React Developer | Remote | Full-time | React TypeScript 3 years.",
+      "created_at": "2026-05-01T11:00:00Z"
+    }
+  ]
+}

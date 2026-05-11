@@ -1,0 +1,4 @@
+Replace this file with your actual resume.pdf or resume.docx
+Then update config.yaml → candidate.resume_path to point to it.
+
+The file is gitignored — your resume stays private.

@@ -1,0 +1,21 @@
+[
+  {"legal": "This data is property of remoteok.io"},
+  {
+    "id": "123456",
+    "position": "Backend Software Engineer",
+    "company": "RemoteCo",
+    "url": "https://remoteok.com/remote-jobs/123456",
+    "location": "Remote",
+    "description": "Backend engineer needed. Java Spring Boot Kafka microservices. Remote. 2-4 years experience.",
+    "date": "2026-05-01T09:00:00Z"
+  },
+  {
+    "id": "123457",
+    "position": "Senior Java Developer",
+    "company": "BigCorp",
+    "url": "https://remoteok.com/remote-jobs/123457",
+    "location": "Remote",
+    "description": "Senior Java developer. 7+ years experience required. Spring Boot microservices.",
+    "date": "2026-05-01T10:00:00Z"
+  }
+]

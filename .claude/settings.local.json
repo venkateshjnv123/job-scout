@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rtk ls *)",
+      "Bash(rtk find *)",
+      "Bash(export PATH=\"/opt/homebrew/bin:$PATH\")",
+      "Bash(rtk uv *)",
+      "Bash(uv run *)",
+      "Bash(sed -i '' 's|./resume.pdf|./Venkatesh_Patnala_Backend_Resume1.pdf|' config.yaml)",
+      "Bash(sed -i '' 's|Your Name|Venkatesh Patnala|' config.yaml)",
+      "Bash(sed -i '' 's|you@example.com|venkateshjnv123@gmail.com|' config.yaml)",
+      "Bash(sed -i '' 's|you@gmail.com|venkateshjnv123@gmail.com|' config.yaml)",
+      "Bash(rtk read *)",
+      "Bash(rtk grep *)",
+      "Bash(xargs -I{} basename {})",
+      "WebSearch",
+      "Bash(rtk curl *)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('count:', d.get\\('count'\\)\\); [print\\(r.get\\('role'\\), '|', r.get\\('company_name'\\), '|', r.get\\('location'\\), '|', r.get\\('keywords'\\)\\) for r in d.get\\('results', []\\)[:5]]\")",
+      "Bash(python3 -c ' *)"
+    ]
+  }
+}

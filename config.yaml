@@ -1,0 +1,44 @@
+candidate:
+  resume_path: ./Venkatesh_Patnala_Backend_Resume1.pdf            # PDF or DOCX
+  name: Venkatesh Patnala
+  yoe_target: [2, 4]
+  locations: [remote, hyderabad, bangalore]
+  must_not_match: [senior, staff, principal, lead, director, "5+ years", "7+ years"]
+
+skill_weights:
+  java: 10
+  spring: 10
+  spring_boot: 10
+  kafka: 7
+  rabbitmq: 5
+  postgres: 5
+  redis: 5
+  microservices: 8
+  aws: 5
+  system_design: 5
+
+sources:
+  hn_hiring: { enabled: true }
+  yc_work: { enabled: true }
+  remoteok: { enabled: true }
+  remotive: { enabled: true }
+  weworkremotely: { enabled: true }
+  reddit: { enabled: false }           # r/forhire — US freelance skewed, low value for India search
+  instahyre: { enabled: true }          # needs INSTAHYRE_COOKIES env var (sessionid + cf_clearance)
+  findwork: { enabled: true }           # needs FINDWORK_API_KEY env var
+
+scoring:
+  use_llm: false                        # auto-true if ANTHROPIC_API_KEY set
+  min_score: 40
+  top_n: 10
+
+output:
+  email:
+    enabled: true
+    to: venkateshjnv123@gmail.com
+    from: venkateshjnv123@gmail.com                 # Gmail app password via SMTP_PASSWORD secret
+    smtp_host: smtp.gmail.com
+    smtp_port: 587
+  markdown:
+    enabled: true
+    commit_to_repo: true
