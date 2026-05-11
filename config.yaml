@@ -1,9 +1,9 @@
 candidate:
   resume_path: ./Venkatesh_Patnala_Backend_Resume1.pdf            # PDF or DOCX
   name: Venkatesh Patnala
-  yoe_target: [2, 4]
-  locations: [remote, hyderabad, bangalore]
-  must_not_match: [senior, staff, principal, lead, director, "5+ years", "7+ years"]
+  yoe_target: [0, 5]
+  locations: [remote, hyderabad, bangalore, chennai, gurugram, noida, india, pune, mumbai]
+  must_not_match: [staff, principal, director, "5+ years", "7+ years"]
 
 skill_weights:
   java: 10
@@ -16,6 +16,11 @@ skill_weights:
   microservices: 8
   aws: 5
   system_design: 5
+  machine_learning: 6
+  llm: 7
+  prompt_engineering: 5
+  ai_training: 4
+  python: 3
 
 sources:
   hn_hiring: { enabled: true }
@@ -23,9 +28,12 @@ sources:
   remoteok: { enabled: true }
   remotive: { enabled: true }
   weworkremotely: { enabled: true }
-  reddit: { enabled: false }           # r/forhire — US freelance skewed, low value for India search
+  reddit: { enabled: true }            # r/forhire [Hiring] posts — gig track
   instahyre: { enabled: true }          # needs INSTAHYRE_COOKIES env var (sessionid + cf_clearance)
   findwork: { enabled: true }           # needs FINDWORK_API_KEY env var
+  upwork: { enabled: false }            # RSS endpoint 410 Gone — disabled
+  jobicy: { enabled: true }             # public JSON API — remote contract jobs
+  himalayas: { enabled: true }          # public JSON API — remote jobs
 
 scoring:
   use_llm: false                        # auto-true if ANTHROPIC_API_KEY set

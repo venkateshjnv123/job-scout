@@ -3,10 +3,13 @@
 from __future__ import annotations
 
 import re
+from datetime import UTC, datetime, timedelta
 
 import structlog
 
 from radar.models import JobPosting
+
+_MAX_AGE = timedelta(days=2)
 
 log = structlog.get_logger()
 
@@ -45,6 +48,20 @@ def _has_high_yoe_requirement(posting: JobPosting) -> bool:
     return bool(_HIGH_YOE.search(posting.body))
 
 
+def _is_stale(posting: JobPosting) -> bool:
+    """Return True for gig-track postings with a date older than 2 days.
+
+    Full-time track relies on seen.db dedup instead of recency filtering,
+    since sources like hn_hiring are monthly threads where all posts appear old.
+    """
+    if posting.track != "gig" or posting.posted_at is None:
+        return False
+    dt = posting.posted_at
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=UTC)
+    return datetime.now(UTC) - dt > _MAX_AGE
+
+
 def apply_filters(
     postings: list[JobPosting],
     locations: list[str],
@@ -52,9 +69,12 @@ def apply_filters(
 ) -> list[JobPosting]:
     """Apply all hard filters, returning only passing postings."""
     passed: list[JobPosting] = []
-    dropped_location = dropped_seniority = dropped_yoe = 0
+    dropped_location = dropped_seniority = dropped_yoe = dropped_stale = 0
 
     for p in postings:
+        if _is_stale(p):
+            dropped_stale += 1
+            continue
         if not _matches_location(p, locations):
             dropped_location += 1
             continue
@@ -70,6 +90,7 @@ def apply_filters(
         "filters_applied",
         total=len(postings),
         passed=len(passed),
+        dropped_stale=dropped_stale,
         dropped_location=dropped_location,
         dropped_seniority=dropped_seniority,
         dropped_yoe=dropped_yoe,

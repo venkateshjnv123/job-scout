@@ -22,11 +22,14 @@ class Source(ABC):
     """
 
     name: str = "base"
+    track: str = "fulltime"
 
     async def fetch(self, client: httpx.AsyncClient) -> list[JobPosting]:
         """Fetch postings, returning empty list on any failure (fail-open)."""
         try:
             postings = await self._fetch(client)
+            for p in postings:
+                p.track = self.track
             log.info("source_fetched", source=self.name, count=len(postings))
             return postings
         except httpx.TimeoutException:

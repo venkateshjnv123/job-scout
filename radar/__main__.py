@@ -15,11 +15,14 @@ from radar.models import ScoredJob
 from radar.resume.parser import parse_resume
 from radar.scoring.rule_based import score_jobs
 from radar.sources.findwork import FindworkSource
+from radar.sources.himalayas import HimalayasSource
 from radar.sources.hn_hiring import HNHiringSource
 from radar.sources.instahyre import InstaHyreSource
+from radar.sources.jobicy import JobicySource
 from radar.sources.reddit import RedditSource
 from radar.sources.remoteok import RemoteOKSource
 from radar.sources.remotive import RemotiveSource
+from radar.sources.upwork import UpworkSource
 from radar.sources.weworkremotely import WeWorkRemotelySource
 from radar.sources.yc_work import YCWorkSource
 
@@ -75,15 +78,21 @@ async def _run(
     profile = parse_resume(settings.candidate.resume_path, name=settings.candidate.name)
 
     # All sources registered here
+    reddit_src = RedditSource()
+    reddit_src.track = "gig"
+
     all_sources = {
         "hn_hiring": HNHiringSource(),
         "yc_work": YCWorkSource(),
         "remoteok": RemoteOKSource(),
         "remotive": RemotiveSource(),
         "weworkremotely": WeWorkRemotelySource(),
-        "reddit": RedditSource(),
+        "reddit": reddit_src,
         "instahyre": InstaHyreSource(token=settings.instahyre_token, cookies=settings.instahyre_cookies),
         "findwork": FindworkSource(api_key=settings.findwork_api_key),
+        "upwork": UpworkSource(),
+        "jobicy": JobicySource(),
+        "himalayas": HimalayasSource(),
     }
 
     active = {
@@ -133,6 +142,10 @@ async def _run(
 
     log.info("scoring_complete", top_jobs=len(scored))
 
+    # Split by track for two-section output
+    fulltime_jobs = [j for j in scored if j.posting.track == "fulltime"]
+    gig_jobs = [j for j in scored if j.posting.track == "gig"]
+
     if dry_run:
         _print_dry_run(scored)
         return
@@ -141,16 +154,17 @@ async def _run(
     if settings.output.markdown.enabled:
         from radar.output.markdown import write_digest
         write_digest(
-            scored,
+            fulltime_jobs,
             total_scored=len(all_postings),
             total_passed=len(filtered),
+            gig_jobs=gig_jobs,
         )
 
     # Send email
     if settings.output.email.enabled and settings.smtp_password:
         from radar.output.email import send_digest
         send_digest(
-            scored,
+            fulltime_jobs,
             total_scored=len(all_postings),
             total_passed=len(filtered),
             to_addr=settings.output.email.to,
@@ -158,6 +172,7 @@ async def _run(
             smtp_password=settings.smtp_password,
             smtp_host=settings.output.email.smtp_host,
             smtp_port=settings.output.email.smtp_port,
+            gig_jobs=gig_jobs,
         )
     elif settings.output.email.enabled and not settings.smtp_password:
         log.warning("email_skipped", reason="SMTP_PASSWORD not set")
@@ -165,7 +180,7 @@ async def _run(
     # Mark top-N scored jobs as seen (only after successful output)
     if not no_dedup and scored:
         with SeenStore("./seen.db") as store:
-            store.mark_seen([job.posting for job in scored])
+            store.mark_seen([job.posting for job in fulltime_jobs + gig_jobs])
 
 
 if __name__ == "__main__":

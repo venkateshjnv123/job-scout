@@ -28,22 +28,26 @@ def send_digest(
     smtp_host: str = "smtp.gmail.com",
     smtp_port: int = 587,
     run_date: date | None = None,
+    gig_jobs: list[ScoredJob] | None = None,
 ) -> None:
     """Send HTML digest email via Gmail SMTP."""
     run_date = run_date or date.today()
     date_str = run_date.strftime("%Y-%m-%d")
+    gig_jobs = gig_jobs or []
 
     env = Environment(loader=FileSystemLoader(str(_TEMPLATES_DIR)), autoescape=True)
     template = env.get_template("digest.html.j2")
     html_body = template.render(
         date=date_str,
         jobs=jobs,
+        gig_jobs=gig_jobs,
         total_scored=total_scored,
         total_passed=total_passed,
     )
 
     msg = MIMEMultipart("alternative")
-    msg["Subject"] = f"Job Radar — {len(jobs)} matches for {date_str}"
+    gig_part = f" · {len(gig_jobs)} gigs" if gig_jobs else ""
+    msg["Subject"] = f"Job Radar — {len(jobs)} jobs{gig_part} · {date_str}"
     msg["From"] = from_addr
     msg["To"] = to_addr
     msg.attach(MIMEText(html_body, "html"))

@@ -17,6 +17,7 @@ class JobPosting(BaseModel):
     body: str
     posted_at: datetime | None = None
     source: str
+    track: str = "fulltime"
 
 
 class ResumeProfile(BaseModel):
